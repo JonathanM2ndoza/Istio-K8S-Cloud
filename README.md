@@ -103,6 +103,38 @@ Congratulations! You successfully installed Istio into your cluster.
 
 ## Download the Guestbook app and create the Redis database
 
+1- Change to the app directory:
+
+![Screenshot](prtsc/Istio-K8S-Cloud-12.png)
+
+Next, you create a Redis database so that you can use to persist the data of your app. The Redis database comes with master and slave modules.
+
+2- Create the Redis controllers and services for both the master and the slave:
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/guestbook/v2$ kubectl create -f redis-master-deployment.yaml
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/guestbook/v2$ kubectl create -f redis-master-service.yaml
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/guestbook/v2$ kubectl create -f redis-slave-deployment.yaml
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/guestbook/v2$ kubectl create -f redis-slave-service.yaml
+
+![Screenshot](prtsc/Istio-K8S-Cloud-13.png)
+
+3- Verify that deployment and service are created:
+
+![Screenshot](prtsc/Istio-K8S-Cloud-14.png)
+
+![Screenshot](prtsc/Istio-K8S-Cloud-14.1.png)
+
+![Screenshot](prtsc/Istio-K8S-Cloud-14.2.png)
+
+
+
+
+
+
+
 
 
 
