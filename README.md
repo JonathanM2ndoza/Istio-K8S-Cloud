@@ -2,7 +2,7 @@
 
 Example of how use Istio and IBM Cloud Kubernetes Service.
 
-## Install the IBM Cloud command-line interface (CLI) 
+## Install the IBM Cloud command-line interface (CLI) and Create Kubernetes Cluster
 
 jmendoza@jmendoza-ThinkPad-T420:~$ curl -sL https://ibm.biz/idt-installer | bash
 
@@ -70,6 +70,41 @@ Begin the Istio pre-installation verification check by running:
 	 istioctl verify-install 
  
 ![Screenshot](prtsc/Istio-K8S-Cloud-8.png)
+
+3- Change the directory to the Istio file location.
+
+jmendoza@jmendoza-ThinkPad-T420:~$ cd istio-1.5.4/
+
+4- Install Istio into the istio-system namespace in your Kubernetes cluster:
+
+jmendoza@jmendoza-ThinkPad-T420:~/istio-1.5.4$ kubectl apply -f $PWD/install/kubernetes/istio-demo.yaml
+
+![Screenshot](prtsc/Istio-K8S-Cloud-9.png)
+
+![Screenshot](prtsc/Istio-K8S-Cloud-9.1.png)
+
+5- Ensure that the istio-* Kubernetes services are deployed before you continue:
+
+jmendoza@jmendoza-ThinkPad-T420:~$ kubectl get svc -n istio-system
+
+![Screenshot](prtsc/Istio-K8S-Cloud-10.png)
+
+Note: For Lite clusters, the istio-ingressgateway service will be in pending state with no external ip. This is normal.
+
+6- Ensure the corresponding pods istio-citadel-*, istio-ingressgateway-*, istio-pilot-*, and istio-policy-* are all in the Running state before you continue.
+
+jmendoza@jmendoza-ThinkPad-T420:~$ kubectl get pods -n istio-system
+
+![Screenshot](prtsc/Istio-K8S-Cloud-11.png)
+
+Before your continue, make sure all the pods are deployed and running. If they're in pending state, wait a few minutes to let the deployment finish.
+
+Congratulations! You successfully installed Istio into your cluster.
+
+## Download the Guestbook app and create the Redis database
+
+
+
 
 
 
