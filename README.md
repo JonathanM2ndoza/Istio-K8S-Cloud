@@ -2,7 +2,7 @@
 
 Example of how use Istio and IBM Cloud Kubernetes Service.
 
-### Install the IBM Cloud command-line interface (CLI) 
+## Install the IBM Cloud command-line interface (CLI) 
 
 jmendoza@jmendoza-ThinkPad-T420:~$ curl -sL https://ibm.biz/idt-installer | bash
 
@@ -49,6 +49,30 @@ jmendoza@jmendoza-ThinkPad-T420:~$ ibmcloud ks workers --cluster k8s-cluster
 jmendoza@jmendoza-ThinkPad-T420:~$ ibmcloud ks worker get --cluster k8s-cluster --worker kube-br0nf9af0k4o0cm5n9vg-k8scluster-default-0000002e
 
 ![Screenshot](prtsc/Istio-K8S-Cloud-6.1.png)
+
+### Working directory 
+
+cd istio101/workshop
+
+This is the working directory for the course labs. Use the sample .yaml files that are located in the workshop/plans directory for the labs.
+
+## Install Istio on IBM Cloud Kubernetes Service
+
+1- Either download Istio from https://github.com/istio/istio/releases or get the latest version by using curl:
+
+jmendoza@jmendoza-ThinkPad-T420:~$ curl -L https://git.io/getLatestIstio | sh -
+
+![Screenshot](prtsc/Istio-K8S-Cloud-7.png)
+
+2- Add the istioctl client to your PATH variable. The <version-number> is in the directory name.
+
+Begin the Istio pre-installation verification check by running:
+	 istioctl verify-install 
+ 
+![Screenshot](prtsc/Istio-K8S-Cloud-8.png)
+
+
+
 
 
 
