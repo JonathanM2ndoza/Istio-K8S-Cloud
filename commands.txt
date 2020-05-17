@@ -22,3 +22,8 @@ container-registry                     0.1.464
 container-service/kubernetes-service   1.0.57
 
 jmendoza@jmendoza-ThinkPad-T420:~$
+
+jmendoza@jmendoza-ThinkPad-T420:~$ kubectl version --client
+Client Version: version.Info{Major:"1", Minor:"16", GitVersion:"v1.16.9", GitCommit:"a17149e1a189050796ced469dbd78d380f2ed5ef", GitTreeState:"clean", BuildDate:"2020-04-16T11:44:51Z", GoVersion:"go1.13.9", Compiler:"gc", Platform:"linux/amd64"}
+
+
