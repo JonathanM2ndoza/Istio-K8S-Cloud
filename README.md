@@ -130,6 +130,38 @@ jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/g
 ![Screenshot](prtsc/Istio-K8S-Cloud-14.2.png)
 
 
+## Install the Guestbook app with manual sidecar injection
+
+In Kubernetes, a sidecar is a utility container in the pod, and its purpose is to support the main container.
+
+For Istio to work, Envoy proxies must be deployed as sidecars to each pod of the deployment. You can inject the Istio sidecar into a pod in two ways:
+
+- Manually by using the istioctl CLI tool
+- Automatically by using the Istio Initializer
+
+In this section, you will use the manual injection. Manual injection modifies the controller configuration, for example, deployment. It does this by modifying the pod template spec such that all pods for that deployment are created with the injected sidecar.
+
+1- Inject the Istio Envoy sidecar into the guestbook pods and deploy the Guestbook app on to the Kubernetes cluster:
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/guestbook/v1$ kubectl apply -f <(istioctl kube-inject -f guestbook-deployment.yaml)
+deployment.apps/guestbook-v1 created
+
+There are two versions of deployments: a new version (v2) in the current directory and a previous version (v1) in a sibling directory. They will be used in future labs to showcase the Istio traffic routing capabilities.
+
+2 - Create the guestbook service:
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/guestbook/v1$ kubectl create -f guestbook-service.yaml
+service/guestbook created
+
+3- Verify that the service was created and that the pods are running:
+
+![Screenshot](prtsc/Istio-K8S-Cloud-15.png)
+
+
+
+
+
+
 
 
 
