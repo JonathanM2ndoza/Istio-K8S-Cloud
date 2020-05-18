@@ -46,6 +46,20 @@ Create the Redis controllers and services for both the master and the slave:
 
 ![Screenshot](prtsc/Istio-K8S-Cloud-13.png)
 
+![Screenshot](prtsc/Istio-K8S-Cloud-14.png)
+
+## Install the Guestbook app with manual sidecar injection
+
+![Screenshot](prtsc/Istio-K8S-Cloud-15.png)
+
+![Screenshot](prtsc/Istio-K8S-Cloud-15.1.png)
+
+![Screenshot](prtsc/Istio-K8S-Cloud-15.2.png)
+
+![Screenshot](prtsc/Istio-K8S-Cloud-15.3.png)
+
+![Screenshot](prtsc/Istio-K8S-Cloud-15.4.png)
+
 
 
 
