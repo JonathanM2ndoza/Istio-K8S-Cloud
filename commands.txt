@@ -25,4 +25,7 @@ jmendoza@jmendoza-ThinkPad-T420:~$
 
 ============================= Set up your environment =============================
 
+Set the context for your cluster in your CLI
+jmendoza@jmendoza-ThinkPad-T420:~$ ibmcloud ks clusters
+jmendoza@jmendoza-ThinkPad-T420:~$ ibmcloud ks cluster config --cluster k8s-cluster-jm
 
