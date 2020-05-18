@@ -29,3 +29,38 @@ Set the context for your cluster in your CLI
 jmendoza@jmendoza-ThinkPad-T420:~$ ibmcloud ks clusters
 jmendoza@jmendoza-ThinkPad-T420:~$ ibmcloud ks cluster config --cluster k8s-cluster-jm
 
+Get basic information about your cluster and its worker nodes
+jmendoza@jmendoza-ThinkPad-T420:~$ ibmcloud ks clusters
+jmendoza@jmendoza-ThinkPad-T420:~$ ibmcloud ks cluster get --cluster k8s-cluster-jm
+jmendoza@jmendoza-ThinkPad-T420:~$ ibmcloud ks workers --cluster k8s-cluster-jm
+jmendoza@jmendoza-ThinkPad-T420:~$ ibmcloud ks worker get --cluster k8s-cluster-jm --worker kube-br0v494d0v235orml2pg-k8sclusterj-default-00000031
+
+============================= Install Istio on IBM Cloud Kubernetes Service =============================
+
+1- Either download Istio from https://github.com/istio/istio/releases or get the latest version by using curl:
+jmendoza@jmendoza-ThinkPad-T420:~$ curl -L https://git.io/getLatestIstio | sh -
+
+2- Add the istioctl client to your PATH variable. The <version-number> is in the directory name.
+jmendoza@jmendoza-ThinkPad-T420:~$ export PATH=$PWD/istio-1.5.4/bin:$PATH
+
+3- Begin the Istio pre-installation verification check by running:
+jmendoza@jmendoza-ThinkPad-T420:~$ istioctl verify-install
+
+4- Change the directory to the Istio file location.
+jmendoza@jmendoza-ThinkPad-T420:~$ cd istio-1.5.4/
+
+5- Install Istio into the istio-system namespace in your Kubernetes cluster:
+jmendoza@jmendoza-ThinkPad-T420:~/istio-1.5.4$ kubectl apply -f $PWD/install/kubernetes/istio-demo.yaml
+
+6- Ensure that the istio-* Kubernetes services are deployed before you continue:
+jmendoza@jmendoza-ThinkPad-T420:~$ kubectl get svc -n istio-system
+
+7- Ensure the corresponding pods istio-citadel-*, istio-ingressgateway-*, istio-pilot-*, and istio-policy-* are all in the Running state before you continue.
+jmendoza@jmendoza-ThinkPad-T420:~$ kubectl get pods -n istio-system
+
+Before your continue, make sure all the pods are deployed and running. If they're in pending state, wait a few minutes to let the deployment finish.
+
+Congratulations! You successfully installed Istio into your cluster.
+
+
+

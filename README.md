@@ -2,7 +2,7 @@
 
 Example of how use Istio and IBM Cloud Kubernetes Service.
 
-### Create Kubernetes cluster in IBM Cloud
+## Create Kubernetes cluster in IBM Cloud
 
 ![Screenshot](prtsc/Istio-K8S-Cloud-3.png)
 
@@ -20,11 +20,33 @@ The service plug-in is displayed in the results as container-service/kubernetes-
 
 ### Set the context for your cluster in your CLI
 
-jmendoza@jmendoza-ThinkPad-T420:~$ ibmcloud ks clusters
-
-jmendoza@jmendoza-ThinkPad-T420:~$ ibmcloud ks cluster config --cluster k8s-cluster-jm
-
 ![Screenshot](prtsc/Istio-K8S-Cloud-4.png)
+
+## Install Istio on IBM Cloud Kubernetes Service
+
+![Screenshot](prtsc/Istio-K8S-Cloud-7.png)
+
+![Screenshot](prtsc/Istio-K8S-Cloud-8.png)
+
+![Screenshot](prtsc/Istio-K8S-Cloud-9.png)
+
+![Screenshot](prtsc/Istio-K8S-Cloud-9.1.png)
+
+Ensure that the istio-* Kubernetes services are deployed before you continue:
+
+![Screenshot](prtsc/Istio-K8S-Cloud-10.png)
+
+Ensure the corresponding pods istio-citadel-*, istio-ingressgateway-*, istio-pilot-*, and istio-policy-* are all in the Running state before you continue.
+
+![Screenshot](prtsc/Istio-K8S-Cloud-11.png)
+
+
+
+
+
+
+
+
 
 
 
