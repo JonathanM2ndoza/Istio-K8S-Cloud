@@ -186,12 +186,12 @@ ID:             crn:v1:bluemix:public:tone-analyzer:us-south:a/61930f79ebdb3d91e
 Creado el:      Mon May 18 04:43:52 UTC 2020
 Estado:         active
 Credenciales:
-                apikey:                   XGT3DRfEpcx08_BxAUYnDdDUsvegY08zZ_FOBkfplQ7u
+                apikey:                   YOUR_API_KEY
                 iam_apikey_description:   Auto-generated for key aac9b1d6-4534-4e95-ad32-1dbf17e407ef
                 iam_apikey_name:          tone-analyzer-key
                 iam_role_crn:             crn:v1:bluemix:public:iam::::serviceRole:Manager
                 iam_serviceid_crn:        crn:v1:bluemix:public:iam-identity::a/61930f79ebdb3d91e5030d0cb0313494::serviceid:ServiceId-658a31f4-1db6-4c8f-9483-bf82fe2b101b
-                url:                      https://api.us-south.tone-analyzer.watson.cloud.ibm.com/instances/8f0298b8-c338-42bb-986c-272bc8e9b3e5
+                url:                      YOUR_URL
 
 jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$
 
@@ -219,12 +219,63 @@ deployment.apps/analyzer created
 jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/guestbook/v2$ kubectl apply -f analyzer-service.yaml
 service/analyzer created
 
+============================= Configure Istio to receive telemetry data =============================
 
+1- Verify that the Grafana, Prometheus, ServiceGraph, and Jaeger add-ons were installed successfully. All add-ons are installed into the istio-system namespace:
 
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud$ kubectl get pods -n istio-system
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud$ kubectl get services -n istio-system
 
+2- Go back to the plans directory at istio101/workshop/plans:
 
+3- Create a rule to collect telemetry data
 
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl create -f guestbook-telemetry.yaml
+instance.config.istio.io/doublerequestcount created
+handler.config.istio.io/doublehandler created
+rule.config.istio.io/doubleprom created
+instance.config.istio.io/newlog created
+handler.config.istio.io/newhandler created
+rule.config.istio.io/newlogstdio created
 
+4- Obtain the guestbook endpoint to access the guestbook from either a paid cluster or a lite cluster.
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl get svc guestbook -n default
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ ibmcloud ks workers --cluster k8s-cluster-jm
 
+5- Generate a small load to the app
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ while sleep 0.5; do curl http://184.172.214.156:32243/; done
 
+============================= View guestbook telemetry data =============================
 
+Jaeger
+
+Establish port forwarding from local port 16686 to the Tracing instance:
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl port-forward -n istio-system \>   $(kubectl get pod -n istio-system -l app=jaeger -o jsonpath='{.items[0].metadata.name}') \
+>   16686:16686 &
+[1] 15252
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ Forwarding from 127.0.0.1:16686 -> 16686
+Forwarding from [::1]:16686 -> 16686
+Handling connection for 16686
+Handling connection for 16686
+Handling connection for 16686
+
+In your browser, go to http://127.0.0.1:16686
+
+Grafana
+
+Establish port forwarding from local port 3000 to the Grafana instance:
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl -n istio-system port-forward \>   $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') \
+>   3000:3000 &
+[2] 15670
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+Handling connection for 3000
+Handling connection for 3000
+Handling connection for 3000
+Handling connection for 3000
+Handling connection for 3000
+Handling connection for 3000
+
+Browse to http://localhost:3000 and navigate to the Istio Mesh Dashboard by clicking the Home menu on the top left.

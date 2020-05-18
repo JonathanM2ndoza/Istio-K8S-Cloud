@@ -68,6 +68,33 @@ jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/i
 
 ![Screenshot](prtsc/Istio-K8S-Cloud-16.png)
 
+## Configure Istio to receive telemetry data
+
+![Screenshot](prtsc/Istio-K8S-Cloud-17.png)
+
+![Screenshot](prtsc/Istio-K8S-Cloud-17.1.png)
+
+### View guestbook telemetry data with Jaeger
+
+Generate a small load to the app
+
+![Screenshot](prtsc/Istio-K8S-Cloud-18.png)
+
+  ```shell
+     jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl port-forward -n istio-system \>   $(kubectl get pod -n istio-system -l app=jaeger -o jsonpath='{.items[0].metadata.name}') \
+     >   16686:16686 &
+     [1] 15252
+     jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ Forwarding from 127.0.0.1:16686 -> 16686
+     Forwarding from [::1]:16686 -> 16686
+     Handling connection for 16686
+     Handling connection for 16686
+     Handling connection for 16686
+  ```
+
+![Screenshot](prtsc/Istio-K8S-Cloud-18.1.png)
+
+
+
 
 
 
