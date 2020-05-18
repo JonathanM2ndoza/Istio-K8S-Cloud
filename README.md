@@ -40,6 +40,11 @@ Ensure the corresponding pods istio-citadel-*, istio-ingressgateway-*, istio-pil
 
 ![Screenshot](prtsc/Istio-K8S-Cloud-11.png)
 
+## Download the Guestbook app and create the Redis database
+
+Create the Redis controllers and services for both the master and the slave:
+
+![Screenshot](prtsc/Istio-K8S-Cloud-13.png)
 
 
 
