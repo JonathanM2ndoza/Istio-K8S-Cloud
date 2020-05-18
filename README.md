@@ -157,6 +157,58 @@ service/guestbook created
 
 ![Screenshot](prtsc/Istio-K8S-Cloud-15.png)
 
+## Add the Watson Tone Analyzer
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ ibmcloud target -g 0ab12564924544da4521dcb28335d9e7e6
+Grupo de recursos de destino default
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ ibmcloud resource service-instance-create my-tone-analyzer-service tone-analyzer lite us-south
+Creando instancia de servicio my-tone-analyzer-service en el grupo de recursos default de la cuenta...
+
+La instancia de servicio my-tone-analyzer-service se ha creado.
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ ibmcloud resource service-key-create tone-analyzer-key Manager --instance-name my-tone-analyzer-service
+
+Tip: If you need to get the service keys later, run this command:
+
+ibmcloud resource service-key tone-analyzer-key
+
+Open the analyzer-deployment.yaml and find the env section near the end of the file. Replace YOUR_API_KEY with your own API key and replace YOUR_URL with the URL value that you saved before. YOUR_URL should look something like this: gateway.watsonplatform.net/tone-analyzer/api. Save the file.
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl apply -f analyzer-egress.yaml
+serviceentry.networking.istio.io/iam-watson created
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/guestbook/v2$ kubectl apply -f <(istioctl kube-inject -f analyzer-deployment.yaml)
+deployment.apps/analyzer created
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/guestbook/v2$ kubectl apply -f analyzer-service.yaml
+service/analyzer created
+
+## Configure Istio to receive telemetry data
+
+Go back to the plans directory at istio101/workshop/plans:
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl create -f guestbook-telemetry.yaml
+
+Generate a small load to the app:
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ while sleep 0.5; do curl http://159.122.177.125:31576/; done
+
+![Screenshot](prtsc/Istio-K8S-Cloud-16.png)
+
+### View guestbook telemetry data
+
+Grafana
+
+Establish port forwarding from local port 3000 to the Grafana instance:
+
+kubectl -n istio-system port-forward \
+  $(kubectl -n istio-system get pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') \
+  3000:3000 &
+  
+Browse to http://localhost:3000 and navigate to the Istio Mesh Dashboard by clicking the Home menu on the top left.
+
+
 
 
 
