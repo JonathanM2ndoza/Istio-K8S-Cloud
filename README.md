@@ -60,6 +60,16 @@ Create the Redis controllers and services for both the master and the slave:
 
 ![Screenshot](prtsc/Istio-K8S-Cloud-15.4.png)
 
+## Add the Watson Tone Analyzer
+
+Create the Watson Tone Analyzer in your account:
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ ibmcloud resource service-instance-create jm-tone-analyzer-service tone-analyzer lite us-south
+
+![Screenshot](prtsc/Istio-K8S-Cloud-16.png)
+
+
+
 
 
 

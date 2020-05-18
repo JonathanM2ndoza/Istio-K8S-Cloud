@@ -99,6 +99,131 @@ There are two versions of deployments: a new version (v2) in the current directo
 2- Verify that the service and was created, that the pods are running:
 jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/guestbook/v2$ kubectl get all
 
+============================= Add the Watson Tone Analyzer =============================
+
+1- Set RESOURCE_GROUP
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ ibmcloud resource service-instance-create my-tone-analyzer-service tone-analyzer lite us-south
+ERROR
+No se ha establecido ningún grupo de recursos como destino. Utilice 'ibmcloud target -g RESOURCE_GROUP' para establecer un grupo de recursos como destino.
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud$ ibmcloud ks cluster get --cluster k8s-cluster-jm
+Recuperando el clúster k8s-cluster-jm...
+OK
+
+Nombre:                                   k8s-cluster-jm
+ID:                                       br0v494d0v235orml2pg
+Estado:                                   normal
+Creado:                                   2020-05-18T02:25:40+0000
+Ubicación:                                hou02
+URL maestro:                              https://c5.dal12.containers.cloud.ibm.com:30482
+URL de punto final de servicio público:   https://c5.dal12.containers.cloud.ibm.com:30482
+URL de punto final de servicio privado:   -
+Ubicación maestra:                        Dallas
+Estado del maestro:                       Ready (15 minutes ago)
+Estado de maestro:                        deployed
+Estado maestro:                           normal
+Subdominio de ingreso:                    - †
+Secreto de ingreso:                       - †
+Trabajadores:                             1
+Zonas de trabajador:                      hou02
+Versión:                                  1.16.9_1529
+Creador:                                  -
+Panel de control de supervisión:          -
+ID de grupo de recursos:                  0ab2824924544da284dcb28335d9e7e6
+Nombre de grupo de recursos:              default
+† Es posible que el secreto y el subdominio de ingreso aún no estén listos. Para obtener más información sobre el tipo de clúster, consulte 'https://ibm.biz/ingress-sub' para Kubernetes o 'https://ibm.biz/ingress-sub-ocp' para OpenShift.
+
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ ibmcloud target -g 0ab2824924544da284dcb28335d9e7e6
+Grupo de recursos de destino default
+
+
+
+Punto final de API:         https://cloud.ibm.com
+Región:                     us-south
+Usuario:                    xxxxx
+Cuenta:                     xxxxx
+Grupo de recursos:          default
+Punto final de API de CF:
+Organización:
+Espacio:
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$
+
+2- Create the Watson Tone Analyzer in your account:
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ ibmcloud resource service-instance-create jm-tone-analyzer-service tone-analyzer lite us-south
+Creando instancia de servicio jm-tone-analyzer-service en el grupo de recursos default de la cuenta xxxxxxx Account como xxxxx..
+Correcto
+La instancia de servicio jm-tone-analyzer-service se ha creado.
+
+Nombre:              jm-tone-analyzer-service
+ID:                  crn:v1:bluemix:public:tone-analyzer:us-south:a/61930f79ebdb3d91e5030d0cb0313494:8f0298b8-c338-42bb-986c-272bc8e9b3e5::
+GUID:                8f0298b8-c338-42bb-986c-272bc8e9b3e5
+Ubicación:           us-south
+Estado:              active
+Tipo:                service_instance
+Subtipo:
+Permitir limpieza:   false
+Locked:              false
+Creado el:           2020-05-18T04:39:12Z
+Actualizado a las:   2020-05-18T04:39:12Z
+Última operación:
+                     Estado    create succeeded
+                     Mensaje   Completed create instance operation
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$
+
+3- Create the service key for the Tone Analyzer service. This command should output the credentials that you just created. You will need the value for the API key and URL later.
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ ibmcloud resource service-key-create tone-analyzer-key Manager --instance-name jm-tone-analyzer-service
+Creando clave de servicio de instancia de servicio jm-tone-analyzer-service bajo la cuenta xxxxxxx Account como xxxxx...
+Correcto
+La clave de servicio crn:v1:bluemix:public:tone-analyzer:us-south:a/61930f79ebdb3d91e5030d0cb0313494:8f0298b8-c338-42bb-986c-272bc8e9b3e5:resource-key:aac9b1d6-4534-4e95-ad32-1dbf17e407ef se ha creado.
+
+Nombre:         tone-analyzer-key
+ID:             crn:v1:bluemix:public:tone-analyzer:us-south:a/61930f79ebdb3d91e5030d0cb0313494:8f0298b8-c338-42bb-986c-272bc8e9b3e5:resource-key:aac9b1d6-4534-4e95-ad32-1dbf17e407ef
+Creado el:      Mon May 18 04:43:52 UTC 2020
+Estado:         active
+Credenciales:
+                apikey:                   XGT3DRfEpcx08_BxAUYnDdDUsvegY08zZ_FOBkfplQ7u
+                iam_apikey_description:   Auto-generated for key aac9b1d6-4534-4e95-ad32-1dbf17e407ef
+                iam_apikey_name:          tone-analyzer-key
+                iam_role_crn:             crn:v1:bluemix:public:iam::::serviceRole:Manager
+                iam_serviceid_crn:        crn:v1:bluemix:public:iam-identity::a/61930f79ebdb3d91e5030d0cb0313494::serviceid:ServiceId-658a31f4-1db6-4c8f-9483-bf82fe2b101b
+                url:                      https://api.us-south.tone-analyzer.watson.cloud.ibm.com/instances/8f0298b8-c338-42bb-986c-272bc8e9b3e5
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$
+
+Tip: If you need to get the service keys later, run this command:
+
+ibmcloud resource service-key tone-analyzer-key
+
+4- Open the analyzer-deployment.yaml (Istio-K8S-Cloud/guestbook/v2) and find the env section near the end of the file.
+Replace YOUR_API_KEY with your own API key and replace YOUR_URL with the URL value that you saved before. YOUR_URL should look something like this: gateway.watsonplatform.net/tone-analyzer/api. Save the file.
+
+5- Apply the egress rules found in the istio101/workshop/plans directory:
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl apply -f analyzer-egress.yaml
+serviceentry.networking.istio.io/iam-watson created
+
+6- Deploy the analyzer pods and service by using the analyzer-deployment.yaml and analyzer-service.yaml files found in the guestbook/v2 directory. The analyzer service talks to Watson Tone Analyzer to help analyze the tone of a message.
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/guestbook/v2$ ls
+analyzer                  analyzer-service.yaml  guestbook-deployment.yaml  README.md                     redis-master-service.yaml    redis-slave-service.yaml
+analyzer-deployment.yaml  guestbook              guestbook-service.yaml     redis-master-deployment.yaml  redis-slave-deployment.yaml
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/guestbook/v2$ kubectl apply -f <(istioctl kube-inject -f analyzer-deployment.yaml)
+deployment.apps/analyzer created
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/guestbook/v2$ kubectl apply -f analyzer-service.yaml
+service/analyzer created
+
+
+
+
+
+
 
 
 
