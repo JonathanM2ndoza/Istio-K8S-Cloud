@@ -120,13 +120,13 @@ In a previous section, you set up some egress rules to allow the guestbook servi
 
 The ServiceEntry defines addresses and ports that services within the mesh are allowed to make requests to. If two browsers are available on your system, observe the modernized guestbook service in Firefox and the original guestbook service in any other browser.
 
-### Other browser (observe the original guestbook service - V1)
-
-![Screenshot](prtsc/Istio-K8S-Cloud-20.1.png)
-
-### Firefox (observe the modernized guestbook service - V2)
+### Firefox (Guestbook service - V2)
 
 ![Screenshot](prtsc/Istio-K8S-Cloud-20.2.png)
+
+### Other browser (Guestbook service - V1)
+
+![Screenshot](prtsc/Istio-K8S-Cloud-20.1.png)
 
 
 
