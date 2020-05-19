@@ -279,3 +279,32 @@ Handling connection for 3000
 Handling connection for 3000
 
 Browse to http://localhost:3000 and navigate to the Istio Mesh Dashboard by clicking the Home menu on the top left.
+
+============================= Expose the Guestbook app with Ingress if you have lite cluster =============================
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl create -f guestbook-gateway.yaml
+gateway.networking.istio.io/guestbook-gateway created
+virtualservice.networking.istio.io/virtual-service-guestbook created
+
+Check the node port of the ingress:
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl create -f guestbook-gateway.yaml
+gateway.networking.istio.io/guestbook-gateway created
+virtualservice.networking.istio.io/virtual-service-guestbook created
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl get svc istio-ingressgateway -n istio-system
+NAME                   TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)                                                                                                                                      AGE
+istio-ingressgateway   LoadBalancer   172.21.208.194   <pending>     15020:31842/TCP,80:31380/TCP,443:31390/TCP,31400:31400/TCP,15029:30732/TCP,15030:31534/TCP,15031:31671/TCP,15032:30542/TCP,15443:31325/TCP   20h
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ ibmcloud ks workers --cluster k8s-cluster-jm
+OK
+ID                                                       IP pública        IP privada     Tipo   Estado   Estado   Zona    Versión
+kube-br0v494d0v235orml2pg-k8sclusterj-default-00000031   184.172.214.156   10.76.193.44   free   normal   Ready    hou02   1.16.9_1531
+
+Get the Public IP of your cluster:
+
+export INGRESS_IP=184.172.214.156:31380
+
+
+
+

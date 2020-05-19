@@ -93,6 +93,13 @@ Generate a small load to the app
 
 ![Screenshot](prtsc/Istio-K8S-Cloud-18.1.png)
 
+## Expose the Guestbook app with Ingress if you have lite cluster
+
+![Screenshot](prtsc/Istio-K8S-Cloud-19.png)
+
+
+
+
 
 
 
