@@ -394,5 +394,25 @@ istio-proxy@guestbook-v2-c6cf5fc89-48t9r:/$ cd etc/certs/
 istio-proxy@guestbook-v2-c6cf5fc89-48t9r:/etc/certs$ ls
 cert-chain.pem  key.pem  root-cert.pem
 
+============================= Create a policy that denies access to services =============================
+
+1- Block access to the Guestbook service:
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl create -f mixer-rule-denial.yaml
+handler.config.istio.io/denyall created
+instance.config.istio.io/denyrequest created
+rule.config.istio.io/deny-guestbook created
 
 
+2- Verify that the service is denied.
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ curl http://184.172.214.156:32243/
+
+3- Remove the rule:
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl delete -f mixer-rule-denial.yaml
+handler.config.istio.io "denyall" deleted
+instance.config.istio.io "denyrequest" deleted
+rule.config.istio.io "deny-guestbook" deleted
+
+Note: Did not work pending review.
