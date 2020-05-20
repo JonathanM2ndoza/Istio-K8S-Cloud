@@ -341,7 +341,58 @@ In the modified rule, the routed traffic is split between two different subsets 
 You can see this in action by going to the ingress IP address (that you saved in a previous lab) in your browser. Ensure that you are using a hard refresh (command + Shift + R on Mac or Ctrl + F5 on Windows) to remove any browser caching. You should notice that the guestbook should swap between V1 or V2 at about the weight you specified.
 
 
+============================= Set up Istio Certificate Authority (CA) =============================
 
+1- Ensure Citadel is running. Citadel is Istio's in-cluster Certificate Authority (CA) and is required for generating and managing cryptographic identities in the cluster.
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl get deployment -l istio=citadel -n istio-system
+NAME            READY   UP-TO-DATE   AVAILABLE   AGE
+istio-citadel   1/1     1            1           45h
+
+2- Define the mTLS authentication policy for the Tone Analyzer service:
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl create -f mtls-to-analyzer.yaml
+policy.authentication.istio.io/mtls-to-analyzer created
+
+3- Confirm the policy was created:
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl get policies.authentication.istio.io
+NAME               AGE
+mtls-to-analyzer   89s
+
+4- Enable mTLS from guestbook by using a Destination rule:
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl create -f route-with-mtls-for-analyzer.yaml
+destinationrule.networking.istio.io/route-with-mtls-for-analyzer created
+
+============================= Verify the authenticated connection =============================
+
+If mTLS is working correctly, the Guestbook app should continue to operate as expected without any visible impact. Istio will automatically add and manage the required certificates and private keys.
+
+To confirm their presence in the Envoy containers, follow these steps:
+
+1- Get the name of a guestbook pod. Make sure the pod is running.
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl get pods -l app=guestbook
+NAME                            READY   STATUS    RESTARTS   AGE
+guestbook-v1-6fc4885c79-k9km4   2/2     Running   0          47h
+guestbook-v1-6fc4885c79-mszbl   2/2     Running   0          47h
+guestbook-v1-6fc4885c79-w5v2v   2/2     Running   0          47h
+guestbook-v2-c6cf5fc89-48t9r    2/2     Running   0          47h
+guestbook-v2-c6cf5fc89-b2sv4    2/2     Running   0          47h
+guestbook-v2-c6cf5fc89-xvqhx    2/2     Running   0          47h
+
+2- SSH into the Envoy container. Make sure to change the pod name to the corresponding one on your system. This command will execute into istio-proxy container (sidecar) of the pod:
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl exec -it guestbook-v2-c6cf5fc89-48t9r -c istio-proxy /bin/bash
+istio-proxy@guestbook-v2-c6cf5fc89-48t9r:/$
+
+3- Verify that the certificate and keys are present:
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl exec -it guestbook-v2-c6cf5fc89-48t9r -c istio-proxy /bin/bash
+istio-proxy@guestbook-v2-c6cf5fc89-48t9r:/$ cd etc/certs/
+istio-proxy@guestbook-v2-c6cf5fc89-48t9r:/etc/certs$ ls
+cert-chain.pem  key.pem  root-cert.pem
 
 
 

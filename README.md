@@ -139,6 +139,19 @@ You should notice that the guestbook should swap between V1 or V2 at about the w
 
 ![Screenshot](prtsc/Istio-K8S-Cloud-21.2.png)
 
+## Set up Istio Certificate Authority (CA)
+
+![Screenshot](prtsc/Istio-K8S-Cloud-22.png)
+
+### Verify the authenticated connection
+
+If mTLS is working correctly, the Guestbook app should continue to operate as expected without any visible impact. Istio will automatically add and manage the required certificates and private keys.
+
+![Screenshot](prtsc/Istio-K8S-Cloud-23.1.png)
+
+Verify that the certificate and keys are present:
+
+![Screenshot](prtsc/Istio-K8S-Cloud-23.png)
 
 
 
