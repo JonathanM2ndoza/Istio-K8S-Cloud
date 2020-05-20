@@ -331,6 +331,16 @@ In a previous section, you set up some egress rules to allow the guestbook servi
 
 The ServiceEntry defines addresses and ports that services within the mesh are allowed to make requests to. If two browsers are available on your system, observe the modernized guestbook service in Firefox and the original guestbook service in any other browser.
 
+============================= Incrementally roll out changes with canary deployments =============================
+
+jmendoza@jmendoza-ThinkPad-T420:~/IdeaProjects/JonathanM2ndoza/Istio-K8S-Cloud/istio101/workshop/plans$ kubectl replace -f virtualservice-80-20.yaml
+virtualservice.networking.istio.io/virtual-service-guestbook replaced
+
+In the modified rule, the routed traffic is split between two different subsets of the guestbook service. In this way, traffic to the modernized version 2 of guestbook is controlled on a percentage basis to limit the impact of any unforeseen bugs. This rule can be modified over time until eventually all traffic is directed to the newer version of the service.
+
+You can see this in action by going to the ingress IP address (that you saved in a previous lab) in your browser. Ensure that you are using a hard refresh (command + Shift + R on Mac or Ctrl + F5 on Windows) to remove any browser caching. You should notice that the guestbook should swap between V1 or V2 at about the weight you specified.
+
+
 
 
 
